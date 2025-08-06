@@ -1,3 +1,4 @@
+# Create a virtual private network.
 resource "aws_vpc" "main" {
     cidr_block = var.vpc_cidr
     enable_dns_support = true
@@ -5,6 +6,7 @@ resource "aws_vpc" "main" {
     tags = { Name = "local-vpc" }
 }
 
+# Create a public subnet within VPC.
 resource "aws_subnet" "public" {
     vpc_id = aws_vpc.main.id
     cidr_block = var.subnet_cidr
@@ -13,11 +15,13 @@ resource "aws_subnet" "public" {
     tags = { value = "public-subnet" }
 }
 
+# Enables internet access for resources in the public subnet.
 resource "aws_internet_gateway" "igw" {
     vpc_id = aws_vpc.main.id
     tags = { Name = "igw" }
 }
 
+# Defines routing rules for public subnet.
 resource "aws_route_table" "public" {
     vpc_id = aws_vpc.main.id
     route {
@@ -27,6 +31,7 @@ resource "aws_route_table" "public" {
     tags = { Name = "public-route" }
 }
 
+# Associates the public subnet with the public route table so traffic can flow through the Internet Gateway.
 resource "aws_route_table_association" "public" {
     subnet_id = aws_subnet.public.id
     route_table_id = aws_route_table.public.id

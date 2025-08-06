@@ -1,13 +1,16 @@
+# Generate an encrypted key.
 resource "tls_private_key" "key-pair" {
     algorithm = "RSA"
     rsa_bits = 4096
 }
 
+# Create an aws-key-pair.
 resource "aws_key_pair" "demo-key" {
     key_name = var.key_name
     public_key = tls_private_key.key-pair.public_key_openssh
 }
 
+# Save key-pair locally and change permission to read-only.
 resource "local_file" "private_key" {
     content = tls_private_key.key-pair.private_key_pem
     filename = "${path.root}/${var.key_name}.pem"
@@ -17,6 +20,7 @@ resource "local_file" "private_key" {
     }
 }
 
+# Create a security group and authorize ssh and http access.
 resource "aws_security_group" "demo-sg" {
     name = "demo-sg"
     vpc_id = var.vpc_id
@@ -43,6 +47,7 @@ resource "aws_security_group" "demo-sg" {
     }
 }
 
+# Create an ec2 instance, connect via ssh and install nginx in server.
 resource "aws_instance" "server" {
     ami = var.ami_id
     instance_type = var.instance_type
