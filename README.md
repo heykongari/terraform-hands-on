@@ -1,4 +1,4 @@
-# Terraform Infrastructure Provisioning
+# Terraform Infrastructure Provisioning (LOCAL STATE)
 
 This repository contains modular and reusable Terraform configurations for provisioning cloud infrastructure on AWS. It demonstrates best practices in Infrastructure as Code (IaC) using Terraform, including support for modular design, variable configuration, and provisioning with `remote-exec`.
 
